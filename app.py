@@ -23,7 +23,7 @@ if uploaded_file:
 else:
     image = Image.open(requests.get("https://picsum.photos/200/120", stream=True).raw)
 
-st.image(image, width=True)
+st.image(image, use_column_width==True)
 
 
 # Button to send
