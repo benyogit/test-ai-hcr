@@ -18,7 +18,7 @@ model_names = [model.name for model in models]
 selected_model = st.selectbox("Select a Gemini model", model_names)
 
 st.write("Streamlit is also great for more traditional ML use cases like computer vision or NLP. Here's an example of edge detection using OpenCV. 👁️") 
-user_input = st.text_input("כתוב את הטקסט מחוון")
+user_input = st.text_input("כתוב את הטקסט מחוון", multiline=True)
 
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 if uploaded_file:
