@@ -18,13 +18,13 @@ model_names = [model.name for model in models]
 selected_model = st.selectbox("Select a Gemini model gemini-1.5-flash for cost effective and gemini-1.5-flash for high accuracy", model_names)
 
 
-st.title("Teacher's Grading Assistant 🍎")
-st.write("Enter your grading criteria and upload the student's handwritten work.")
+st.title("עוזר למורה 🍎")
+st.write("הזן את קריטריוני הציונים והעלה את עבודת הכתב של התלמיד.")
 
 # 1. Teacher's Parameters (The Guide)
 teacher_guide = st.text_area(
-    "Teacher's Guide / Rubric:",
-    placeholder="e.g., Give 10 points for mentioning the 'Exodus', 5 points for grammar...",
+    "מחוון למורה",
+    placeholder="תן תבחין לציון והסבר על חלוקת ציוןים (למשל: מצוין, בינוני, צריך שיפור) עבור התשובה של התלמיד.",
     height=150
 )
 
