@@ -36,7 +36,7 @@ if st.button("שלח את הטקסט ל-Gemini"):
             # SEND TO GEMINI
             # ---------------------------
             model = genai.GenerativeModel("gemini-pro")
-            response = model.generate_content(content=[user_input,image])
+            response = model.generate_content(contents=[user_input,image])
 
             # Display Gemini's response
             st.subheader("Gemini's Response:")
