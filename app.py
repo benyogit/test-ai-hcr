@@ -39,10 +39,11 @@ if st.button("שלח את הטקסט ל-Gemini"):
             # SEND TO GEMINI
             # ---------------------------
             model = genai.GenerativeModel(selected_model)
+            
             response = model.generate_content(contents=[user_input,image])
 
             # Display Gemini's response
-            st.subheader("Gemini's Response:")
+            st.subheader("Gemini's Response: with model " + selected_model)
             st.write(response.text)
 
         except Exception as e:
