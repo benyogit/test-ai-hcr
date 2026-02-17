@@ -13,6 +13,9 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
+models = genai.list_models()
+model_names = [model.name for model in models]
+selected_model = st.selectbox("Select a Gemini model", model_names)
 
 st.write("Streamlit is also great for more traditional ML use cases like computer vision or NLP. Here's an example of edge detection using OpenCV. 👁️") 
 user_input = st.text_input("כתוב את הטקסט מחוון")
@@ -35,7 +38,7 @@ if st.button("שלח את הטקסט ל-Gemini"):
             # ---------------------------
             # SEND TO GEMINI
             # ---------------------------
-            model = genai.GenerativeModel("v1")
+            model = genai.GenerativeModel(selected_model)
             response = model.generate_content(contents=[user_input,image])
 
             # Display Gemini's response
