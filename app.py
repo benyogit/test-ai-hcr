@@ -15,36 +15,51 @@ genai.configure(api_key=api_key)
 
 models = genai.list_models()
 model_names = [model.name for model in models]
-selected_model = st.selectbox("Select a Gemini model", model_names)
-
-st.write("Streamlit is also great for more traditional ML use cases like computer vision or NLP. Here's an example of edge detection using OpenCV. 👁️") 
-user_input = st.text_area("כתוב את הטקסט מחוון")
-
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-if uploaded_file:
-    image = Image.open(uploaded_file)
-else:
-    image = Image.open(requests.get("https://picsum.photos/200/120", stream=True).raw)
-
-st.image(image, use_column_width=True)
+selected_model = st.selectbox("Select a Gemini model gemini-1.5-flash for cost effective and gemini-1.5-flash for high accuracy", model_names)
 
 
-# Button to send
-if st.button("שלח את הטקסט ל-Gemini"):
-    if not user_input.strip():
-        st.warning("⚠️ Please enter some text before sending.")
+st.title("Teacher's Grading Assistant 🍎")
+st.write("Enter your grading criteria and upload the student's handwritten work.")
+
+# 1. Teacher's Parameters (The Guide)
+teacher_guide = st.text_area(
+    "Teacher's Guide / Rubric:",
+    placeholder="e.g., Give 10 points for mentioning the 'Exodus', 5 points for grammar...",
+    height=150
+)
+
+# 2. Image Upload
+uploaded_file = st.file_uploader("Upload Student's Hand-written Answer", type=["jpg", "png", "jpeg"])
+
+if st.button("Analyze & Grade"):
+    if not teacher_guide.strip() or not uploaded_file:
+        st.warning("⚠️ Please provide both the grading guide and the student's work.")
     else:
         try:
-            # ---------------------------
-            # SEND TO GEMINI
-            # ---------------------------
+            image = Image.open(uploaded_file)
             model = genai.GenerativeModel(selected_model)
             
-            response = model.generate_content(contents=[user_input,image])
-
-            # Display Gemini's response
-            st.subheader("Gemini's Response: with model " + selected_model)
-            st.write(response.text)
-
+            # Constructing the complex instruction
+            full_prompt = f"""
+            You are a professional teacher's assistant.
+            
+            ### GRADING RUBRIC / TEACHER GUIDE:
+            {teacher_guide}
+            
+            ### TASK:
+            1. Transcribe the handwritten Hebrew text from the image accurately.
+            2. Evaluate the content based ONLY on the Grading Rubric provided above.
+            3. Provide a breakdown of points (Excellent/Moderate/Needs Work).
+            4. Suggest a final grade.
+            
+            Please provide the response in Hebrew, formatted clearly with Markdown headers.
+            """
+            
+            with st.spinner("Decoding handwriting and grading..."):
+                response = model.generate_content([full_prompt, image])
+                
+                st.subheader("Grading Report")
+                st.markdown(response.text)
+                
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Analysis failed: {e}")
