@@ -81,7 +81,7 @@ if st.button("בצע בדיקה ומתן ציון"):
     else:
         try:
             with st.spinner("Gemini מנתח את כתב היד ומחשב ציון..."):
-                model = genai.GenerativeModel(selected_model)
+                model = genai.GenerativeModel(model_name=selected_model.replace("models/", ""))
                 
                 # בניית הפרומפט המקצועי
                 prompt = f"""
